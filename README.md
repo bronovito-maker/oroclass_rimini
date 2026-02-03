@@ -1,61 +1,88 @@
-# OroClass Rimini - Premium Fintech Gold Buyer Platform
+# 🏆 OroClass Rimini - Premium Gold Buying Platform
+### High-Conversion Landing Page with Real-Time Calculator
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3 Luxury](https://img.shields.io/badge/CSS3-Luxury_Dark_Mode-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Mobile First](https://img.shields.io/badge/Mobile-First_Approach-success?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Development-yellow?style=for-the-badge)
+
+---
 
 ## 💎 Project Overview
-This project represents a complete redesign of the **OroClass Rimini** digital presence. The goal was to transform a traditional "Compro Oro" website into a **Human-Centric Luxury Fintech Platform**.
 
-By blending the warmth of personal service ("The Sabrina Effect") with the precision of financial tools, the new site establishes **OroClass** as the "Gold Standard" in Rimini.
+This project is a total re-imagining of **OroClass Rimini**, a historic gold buying business. The goal was to transform a standard "Compro Oro" website into a **Financial Boutique Experience**. 
+
+We moved away from the typical "noisy" and "urgent" aesthetic of the sector, embracing a **Dark Luxury** mood that communicates authority, tranquility, and high value. The core philosophy is **Human-Centric Fintech**: blending digital efficiency (live calculator) with human warmth (the "Sabrina" trust factor).
+
+### 🎯 Core Objectives
+*   **Trust First**: Dismantle the stigma of gold selling through transparency and social proof.
+*   **Mobile Speed**: Designed primarily for the smartphone user on the go.
+*   **Zero Friction**: From landing to "Call Now" in less than 3 seconds.
+
+---
 
 ## ✨ Key Features
 
-### 1. Human-Centric Luxury Design
-- **Aesthetic**: A sophisticated **Onyx (#0B0E14)** and **Warm Gold (#E1C16E)** color palette that conveys authority without being cold.
-- **Typography**: Uses *Montserrat* for commanding headers and *Inter* for clean, readable body text.
-- **Glassmorphism**: Modern UI elements with frosted glass effects for depth and elegance.
+### 1. 🌑 Dark Luxury UI
+A proprietary design system built on deep blacks (`#0B0E14`), charcoal grays, and a warm metallic gold (`#E1C16E`). Glassmorphism effects (`backdrop-filter`) are used in the navigation and overlays to create depth and sophistication.
 
-### 2. "Transparency Engine" Calculator
-- **No Hidden Fees**: A custom calculator that breaks down the math for the user:
-  `Spot Price` × `Purity` - `Spread` = **Your Payout**.
-- **Real-Time Data**: Designed to work with live market feed inputs.
-- **Conversion Focus**: "Lock Price" (Blocca Prezzo) call-to-action to drive in-store visits.
+### 2. 🧮 Live Gold Calculator (Conversion Engine)
+A custom-built JavaScript widget that floats over the hero section.
+*   **Precision Input**: Replaced inexact sliders with large numeric fields.
+*   **Rolling Numbers**: Total value animates smoothly (`CountUp` effect) for a premium feel.
+*   **WhatsApp Lock**: The "Lock Price" button pre-fills a message to the store manager.
 
-### 3. Fintech Trust Signals
-- **Live Ticker**: A stock-market style ticker showing real-time Gold and Silver trends.
-- **Wall of Love**: A prominent testimonials section featuring specific, high-trust reviews (Lucia, Filippo, Leonardo).
-- **Compliance Grid**: Clear visualization of OAM licensing, anti-money laundering (AML) compliance, and European Accessibility standards.
+### 3. 🤝 Human-Centric Trust Engine
+*   **Reviews**: Strategic placement of verified testimonials ("Wall of Love") immediately after price discovery.
+*   **The "Sabrina" Factor**: A dedicated section introducing the Store Manager to humanize the business ("No bulletproof glass").
 
-### 4. Mobile-First Optimization
-- **Sticky Action Bar**: A floating bottom bar on mobile ensures critical actions ("Call", "Map") are always within thumb's reach.
-- **Performance**: Optimized CSS/JS for 60fps animations and instant load times.
+### 4. 📱 Sticky Mobile CTA
+A persistent bottom bar on mobile devices containing the two most critical actions:
+*   📞 **Chiama Subito** (Call Now)
+*   📍 **Naviga** (Google Maps)
 
-## 🛠 Tech Stack
-- **Core**: Semantic HTML5, CSS3 (Custom Properties/Variables), Vanilla JavaScript.
-- **Build Tool**: Vite (for fast development and bundled production builds).
-- **Styling**: BEM naming convention, fully responsive Grid/Flexbox layouts.
+### 5. ⚖️ Legal Compliance
+Full integration of regulatory requirements for the Gold Buying sector:
+*   **OAM Registration**: `OCO4209` visible in footer.
+*   **Police Authorization**: Questura License data included.
+*   **Anti-Money Laundering**: Dedicated legal section explaining ID requirements and cash limits (> €499.99).
 
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js installed.
-
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/bronovito-maker/oroclass_rimini.git
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
+---
 
 ## 📂 Project Structure
-- `index.html`: Main landing page structure.
-- `style.css`: Global design system, component styles, and responsive utilities.
-- `script.js`: Logic for the calculator, ticker simulation, and UI interactions.
-- `resources/`: Assets (images, icons).
 
-## 📄 License
-All rights reserved © 2026 OroClass Rimini.
+```bash
+/
+├── index.html              # Main Entry Point (Landing Page)
+├── style.css               # Main Stylesheet (Variables, Design System, Utils)
+├── script.js               # Logic (Calculator, Animations, UI Interactions)
+├── README.md               # Project Documentation
+└── resources/              # Assets & Auxiliary Pages
+    ├── css/                # Component-specific styles (e.g., custom-confirm.css)
+    ├── img/                # Images and Icons
+    └── pages/              # Secondary Pages (FAQ, Context, Privacy, Terms)
+```
+
+---
+
+## 🚀 Installation & Deploy
+
+This project is built with **Vanilla HTML/CSS/JS** for maximum performance and zero dependencies.
+
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/your-username/oroclass-rimini.git
+    ```
+2.  **Run Locally**:
+    Simply open `index.html` in your browser. No build steps (npm/webpack) are strictly required for the production build, though a local server (like Live Server) is recommended for development.
+
+---
+
+## 📞 Contacts & Credits
+
+**OroClass Rimini**  
+Viale Rimembranze, 40 - Rimini  
+[shop@oroclass.net](mailto:shop@oroclass.net)
+
+---
+*Developed with ❤️ by [Il Tuo Nome]*
