@@ -1,19 +1,31 @@
 /**
  * OroClass Finance - Script.js
- * Fintech UX/UI 2026 Edition - Smart Pricing Engine
- * Features: 
- * - Multi-Karat Evaluation
- * - Real-Time API Fetching (Smart 24h Cache)
- * - Automatic 40% Markdown Application
- * - Rolling Total Animation
+ * Fintech UX/UI 2026 Edition - Market-Based Pricing Engine
+ * 
+ * Features:
+ * - Multi-Karat Evaluation (Gold: 24k, 18k, 14k | Silver: 999, 925, 800)
+ * - Real-Time API Fetching with Smart 24h Cache
+ * - Market-Based Spreads (Gold 15%, Silver 30%)
+ * - Automatic Oz-to-Gram Detection & Conversion
+ * - Live Market Status (LBMA Hours)
+ * - Transparent Debug Logging
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. CONFIGURATION & STATE ---
     const API_URL = 'resources/api/get_metals_smart.php';
-    const MARKDOWN = 0.60; // 40% Margin (We pay 60% of Spot)
+
+    // Market-Based Payout Percentages (Client receives)
+    const PAYOUT_GOLD = 0.85;   // Gold: 15% spread (client gets 85%)
+    const PAYOUT_SILVER = 0.573; // Silver: 42.7% spread (client gets 57.3%)
+
     const CACHE_DURATION = 24 * 60 * 60; // 24 hours in seconds
+    const OZ_TO_GRAMS = 31.1035; // Conversion factor for troy ounce to grams
+
+    // Detection thresholds for oz-to-gram conversion
+    const SILVER_GRAM_THRESHOLD = 5.00;  // If > 5€, likely in oz
+    const GOLD_GRAM_THRESHOLD = 150.00;  // If > 150€, likely in oz
 
     // Base Prices (Pure 24k/999) - Initialized to 0
     let basePrices = {
@@ -87,7 +99,35 @@ document.addEventListener('DOMContentLoaded', () => {
         window.requestAnimationFrame(step);
     }
 
-    // --- 5. COUNTDOWN TIMER ---
+    // --- 5. PRICE NORMALIZATION HELPER ---
+    /**
+     * Normalizes API price to EUR per GRAM
+     * Handles oz-to-gram conversion if needed
+     * @param {object} metalData - API data for gold or silver
+     * @param {string} metalType - 'gold' or 'silver'
+     * @returns {number} - Price in EUR per gram
+     */
+    function normalizePricePerGram(metalData, metalType) {
+        // Try to get price from API (prefer price_gram_24k, fallback to price)
+        let rawPrice = metalData.price_gram_24k || metalData.price;
+
+        if (!rawPrice || rawPrice === 0) {
+            console.error(`❌ No valid price found for ${metalType}`);
+            return 0;
+        }
+
+        // Smart detection: if price is suspiciously high, it's likely in oz
+        const threshold = metalType === 'gold' ? GOLD_GRAM_THRESHOLD : SILVER_GRAM_THRESHOLD;
+
+        if (rawPrice > threshold) {
+            console.warn(`⚠️ ${metalType.toUpperCase()} price ${rawPrice.toFixed(2)}€ exceeds threshold ${threshold}€ - converting from oz to grams`);
+            rawPrice = rawPrice / OZ_TO_GRAMS;
+        }
+
+        return rawPrice;
+    }
+
+    // --- 6. COUNTDOWN TIMER ---
     function startCountdown(targetTimestamp) {
         // Clear existing interval
         if (countdownInterval) clearInterval(countdownInterval);
@@ -223,16 +263,37 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data && data.gold && data.silver) {
-                // Parse API Data
-                // The API returns 'price' or 'price_gram_24k'. 
-                // We use price_gram_24k or fallback to 'price' (per gram).
+                // Normalize prices to EUR per GRAM (handles oz conversion if needed)
+                const rawGold24k = normalizePricePerGram(data.gold, 'gold');
+                const rawSilver999 = normalizePricePerGram(data.silver, 'silver');
 
-                const rawGold24k = data.gold.price_gram_24k || data.gold.price;
-                const rawSilver999 = data.silver.price_gram_24k || data.silver.price;
+                // === DEBUG LOGGING (Transparency) ===
+                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                console.log('📊 PREZZI API NORMALIZZATI (EUR/grammo):');
+                console.log(`🥇 ORO PURO (24k): ${rawGold24k.toFixed(2)} €/g`);
+                console.log(`🥈 ARGENTO PURO (999): ${rawSilver999.toFixed(4)} €/g`);
+                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-                // Apply 40% SPREAD immediately to the Base Price
-                basePrices.gold = rawGold24k * MARKDOWN;
-                basePrices.silver = rawSilver999 * MARKDOWN;
+                // Apply Market-Based Spreads to Base Prices
+                basePrices.gold = rawGold24k * PAYOUT_GOLD;
+                basePrices.silver = rawSilver999 * PAYOUT_SILVER;
+
+                console.log('💰 PREZZI CLIENTE (dopo spread):');
+                console.log(`🥇 ORO: ${basePrices.gold.toFixed(2)} €/g (cliente riceve ${(PAYOUT_GOLD * 100).toFixed(0)}% del valore spot)`);
+                console.log(`🥈 ARGENTO: ${basePrices.silver.toFixed(4)} €/g (cliente riceve ${(PAYOUT_SILVER * 100).toFixed(0)}% del valore spot)`);
+                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+                // Update Hero Section Ticker Prices
+                const price24kt = document.getElementById('price-24kt');
+                const price18kt = document.getElementById('price-18kt');
+                const priceSilver = document.getElementById('price-silver');
+
+                // Calculate 18kt gold price (75% purity)
+                const gold18ktPrice = rawGold24k * 0.750 * PAYOUT_GOLD;
+
+                if (price24kt) price24kt.textContent = `€ ${rawGold24k.toFixed(2)}`;
+                if (price18kt) price18kt.textContent = `€ ${gold18ktPrice.toFixed(2)}`;
+                if (priceSilver) priceSilver.textContent = `€ ${basePrices.silver.toFixed(2)}`;
 
                 // Update Timestamp UI and Start Countdown
                 if (data.updated_at) {
@@ -247,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (sectionTitle && !document.getElementById('price-badge')) {
                         const badge = document.createElement('span');
                         badge.id = 'price-badge';
-                        badge.className = 'ticker-trend';
+                        badge.className = 'ticker-trend price-update-badge';
                         badge.style.marginLeft = '12px';
                         badge.style.fontSize = '0.75rem';
                         badge.style.color = 'var(--color-text-muted)';
