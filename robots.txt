@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /resources/pages/tv/
+Disallow: /resources/pages/changeQuotation.html
