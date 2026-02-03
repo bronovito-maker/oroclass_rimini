@@ -392,11 +392,34 @@ h2 {
     font-weight: 500;
     font-size: 0.9rem;
     color: var(--color-text-muted);
-    transition: color 0.3s;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
 }
 
 .nav-link:hover {
     color: white;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(225, 193, 110, 0.2);
+}
+
+/* Override for primary button in navbar */
+.nav-link.btn-primary {
+    background: var(--gradient-gold);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 4px 12px rgba(225, 193, 110, 0.3);
+}
+
+.nav-link.btn-primary:hover {
+    background: linear-gradient(135deg, #D4AF37, #F4E5B0);
+    box-shadow: 0 6px 16px rgba(225, 193, 110, 0.5);
+    transform: translateY(-2px);
+    color: #000;
 }
 
 .menu-toggle {
@@ -1266,4 +1289,60 @@ select:focus {
     .section-padding {
         padding: 3rem 0;
     }
+}
+
+/* ===================== */
+/* MARKET STATUS INDICATOR */
+/* ===================== */
+
+.market-status-badge {
+    font-family: var(--font-body);
+}
+
+/* Status Dot - Default (Closed) */
+.status-dot {
+    background: #64748b;
+    /* Gray */
+    transition: background 0.3s ease;
+}
+
+/* Status Dot - OPEN (Green with pulse) */
+.status-dot.market-open {
+    background: var(--color-success);
+    animation: pulse-green 2s ease-in-out infinite;
+}
+
+/* Status Dot - CLOSED (Red) */
+.status-dot.market-closed {
+    background: #ef4444;
+    /* Red */
+}
+
+/* Pulsing Animation */
+@keyframes pulse-green {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+
+    50% {
+        opacity: 0.8;
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+}
+
+/* Status Text Styling */
+.status-text {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.status-text.market-open {
+    color: var(--color-success);
+}
+
+.status-text.market-closed {
+    color: #94A3B8;
 }
