@@ -127,7 +127,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return rawPrice;
     }
 
-    // --- 6. COUNTDOWN TIMER ---
+    // --- 6. GET NEXT MARKET OPEN TIME ---
+    function getNextMarketOpenTimestamp() {
+        const now = new Date();
+        const italyTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Rome' }));
+
+        const day = italyTime.getDay(); // 0 = Sunday, 6 = Saturday
+        const hours = italyTime.getHours();
+        const minutes = italyTime.getMinutes();
+        const currentTimeMinutes = hours * 60 + minutes;
+        const marketOpen = 9 * 60; // 09:00 = 540 minutes
+
+        // Create a date for next opening
+        let nextOpen = new Date(italyTime);
+        nextOpen.setHours(9, 0, 0, 0);
+
+        // If it's a weekday and before 9am, market opens today
+        if (day >= 1 && day <= 5 && currentTimeMinutes < marketOpen) {
+            return Math.floor(nextOpen.getTime() / 1000);
+        }
+
+        // Otherwise, find next weekday at 9am
+        let daysToAdd = 1;
+        if (day === 0) daysToAdd = 1; // Sunday -> Monday
+        else if (day === 5) daysToAdd = 3; // Friday -> Monday
+        else if (day === 6) daysToAdd = 2; // Saturday -> Monday
+
+        nextOpen.setDate(nextOpen.getDate() + daysToAdd);
+        nextOpen.setHours(9, 0, 0, 0);
+
+        return Math.floor(nextOpen.getTime() / 1000);
+    }
+
+    // --- 7. COUNTDOWN TIMER ---
     function startCountdown(targetTimestamp) {
         // Clear existing interval
         if (countdownInterval) clearInterval(countdownInterval);
@@ -143,7 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     countdownDisplay.textContent = '00:00';
                 }
                 clearInterval(countdownInterval);
-                // API updates only once per day at 10:30 AM - no auto-refresh
+                // Restart countdown to next market open
+                startCountdown(getNextMarketOpenTimestamp());
+                checkMarketStatus(); // Update market status
                 return;
             }
 
@@ -165,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
-    // --- 6. MARKET STATUS CHECKER (LBMA Hours) ---
+    // --- 8. MARKET STATUS CHECKER (LBMA Hours) ---
     function checkMarketStatus() {
         // Get current time in Europe/Rome timezone
         const now = new Date();
@@ -187,6 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update UI
         if (!statusDot || !statusText) return;
 
+        // Update countdown label
+        const countdownLabel = document.getElementById('countdown-label');
+        const countdownContainer = document.getElementById('countdown-container');
+
         if (isOpen) {
             // MARKET OPEN
             statusDot.classList.remove('market-closed');
@@ -197,6 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (statusSubtext) {
                 statusSubtext.textContent = 'Quotazioni LBMA in tempo reale';
+            }
+
+            // Hide countdown when market is open
+            if (countdownContainer) {
+                countdownContainer.style.display = 'none';
             }
         } else {
             // MARKET CLOSED
@@ -220,6 +263,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (statusSubtext) {
                 statusSubtext.textContent = reopenMessage;
+            }
+
+            // Show countdown when market is closed
+            if (countdownContainer) {
+                countdownContainer.style.display = 'block';
+            }
+            if (countdownLabel) {
+                countdownLabel.textContent = 'Apertura in:';
             }
         }
     }
@@ -319,9 +370,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById('price-badge').innerHTML = `• Aggiornato: ${dateString}`;
                     }
 
-                    // Start countdown to next update (24h from last update)
-                    const nextUpdate = data.updated_at + CACHE_DURATION;
-                    startCountdown(nextUpdate);
+                    // Start countdown to next market open
+                    const nextMarketOpen = getNextMarketOpenTimestamp();
+                    startCountdown(nextMarketOpen);
                 }
 
                 // Recalculate immediately with new prices
