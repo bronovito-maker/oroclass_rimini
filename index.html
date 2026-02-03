@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=yes">
 
     <!-- SEO Meta Tags - Ottimizzati per Rimini -->
     <title>Compro Oro Rimini - Massima Valutazione Garantita | OroClass</title>
@@ -157,13 +160,25 @@
                 </a>
             </div>
 
-            <button class="menu-toggle" aria-label="Apri Menu" aria-expanded="false" aria-controls="nav-menu">☰</button>
+            <button class="menu-toggle" aria-label="Apri Menu" aria-expanded="false" aria-controls="nav-menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
             <nav id="nav-menu" class="nav-menu" role="navigation" aria-label="Menu Principale">
-                <a href="#quotazioni" class="nav-link">📈 Quota Oro</a>
-                <a href="#contatti" class="nav-link">📍 Trova Negozio</a>
-                <a href="tel:05411524341" class="nav-link btn btn-primary" style="padding: 0.5rem 1.5rem;">📞 Chiama
-                    Ora</a>
+                <a href="#quotazioni" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Quota Oro</span>
+                </a>
+                <a href="#contatti" class="nav-link">
+                    <span class="nav-icon">📍</span>
+                    <span class="nav-text">Trova Negozio</span>
+                </a>
+                <a href="tel:05411524341" class="nav-link nav-link-cta">
+                    <span class="nav-icon">📞</span>
+                    <span class="nav-text">CHIAMA ORA</span>
+                </a>
             </nav>
         </div>
     </header>
