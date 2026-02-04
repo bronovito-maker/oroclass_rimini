@@ -71,13 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 3. MOBILE MENU TOGGLE ---
     const menuToggle = document.querySelector('.menu-toggle');
-    const navMenu = document.querySelector('.nav-menu');
+    const navMenu = document.querySelector('.mobile-nav-overlay');
 
     function closeMenu() {
         if (navMenu && menuToggle) {
             navMenu.classList.remove('active');
             menuToggle.setAttribute('aria-expanded', 'false');
+
+            // Simple unlock & cleanup
             document.body.style.overflow = '';
+            navMenu.style.position = '';
+            navMenu.style.top = '';
+            navMenu.style.height = '';
         }
     }
 
@@ -85,12 +90,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navMenu && menuToggle) {
             navMenu.classList.add('active');
             menuToggle.setAttribute('aria-expanded', 'true');
+
+            // ROBUST LAYOUT FIX:
+            // Force absolute positioning + scrollY to bypass any 'transform' on body
+            // which breaks specific mobile browsers' 'position: fixed'.
+            const scrollY = window.scrollY;
+            navMenu.style.position = 'absolute';
+            navMenu.style.top = `${scrollY}px`;
+            navMenu.style.height = `${window.innerHeight}px`;
+
+            // Lock body
             document.body.style.overflow = 'hidden';
+
+            // Reset internal scroll list
+            navMenu.scrollTop = 0;
         }
     }
 
     if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
             if (isExpanded) {
                 closeMenu();
@@ -98,13 +117,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 openMenu();
             }
         });
+    }
 
-        // Close menu when clicking on nav links
-        const navLinks = navMenu.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
+    // Close button event listener
+    const closeBtn = document.querySelector('.close-menu-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeMenu);
+    }
+
+    // Close menu when clicking on nav links (Desktop & Mobile)
+    const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-item');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            closeMenu();
+        });
+    });
+
+    // Close menu when clicking on Mobile CTA
+    const mobileCtaLink = document.querySelector('.mobile-nav-footer a');
+    if (mobileCtaLink) {
+        mobileCtaLink.addEventListener('click', closeMenu);
+    }
+
+    // Close menu when clicking on the overlay (outside nav links)
+    if (navMenu) {
+        navMenu.addEventListener('click', (e) => {
+            // Only close if clicking directly on nav-menu (not on children)
+            if (e.target === navMenu) {
                 closeMenu();
-            });
+            }
         });
     }
 
@@ -449,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const message = `Buongiorno! Ho appena calcolato questa quotazione sul sito:\n\n${details}\n💰 TOTALE: ${total}\n\nVorrei fissare un appuntamento per bloccare il prezzo.`;
-            const waLink = `https://wa.me/393494408810?text=${encodeURIComponent(message)}`;
+            const waLink = `https://wa.me/393407964936?text=${encodeURIComponent(message)}`;
 
             window.open(waLink, '_blank');
         });
@@ -468,7 +509,83 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 9. INITIALIZATION ---
+    // --- 9. STICKY BAR KEYBOARD MANAGEMENT ---
+    const stickyBar = document.querySelector('.sticky-bar');
+    const calculatorInputs = document.querySelectorAll('.karat-input');
+
+    // --- 1. HEADER SCROLL EFFECT (Optimized) ---
+    const header = document.querySelector('.site-header');
+
+    function updateHeader() {
+        if (!header) return;
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+
+    if (header) {
+        window.addEventListener('scroll', updateHeader, { passive: true });
+        // Initial check
+        updateHeader();
+    }
+
+    // Hide sticky bar when keyboard opens (input focus)
+    calculatorInputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            if (stickyBar) {
+                stickyBar.classList.add('hidden-keyboard');
+            }
+        });
+
+        input.addEventListener('blur', () => {
+            if (stickyBar) {
+                // Delay to allow time for user to tap another input
+                setTimeout(() => {
+                    // Check if no other calculator input is focused
+                    const anyFocused = Array.from(calculatorInputs).some(inp => inp === document.activeElement);
+                    if (!anyFocused) {
+                        stickyBar.classList.remove('hidden-keyboard');
+                    }
+                }, 100);
+            }
+        });
+    });
+
+    // Also handle when user scrolls while keyboard is open
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (stickyBar && stickyBar.classList.contains('hidden-keyboard')) {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                // Re-check if any input is still focused
+                const anyFocused = Array.from(calculatorInputs).some(inp => inp === document.activeElement);
+                if (!anyFocused) {
+                    stickyBar.classList.remove('hidden-keyboard');
+                }
+            }, 300);
+        }
+    });
+
+    // Handle orientation change and resize events
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            // Re-check if any input is focused after resize/orientation change
+            const anyFocused = Array.from(calculatorInputs).some(inp => inp === document.activeElement);
+            if (stickyBar) {
+                if (anyFocused) {
+                    stickyBar.classList.add('hidden-keyboard');
+                } else {
+                    stickyBar.classList.remove('hidden-keyboard');
+                }
+            }
+        }, 200);
+    });
+
+    // --- 10. INITIALIZATION ---
     updatePrices();
 
     // Check market status immediately and update every minute
