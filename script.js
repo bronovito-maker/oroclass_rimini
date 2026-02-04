@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lockBtn) {
         lockBtn.addEventListener('click', () => {
             const total = resultDisplay.textContent;
-            let details = '';
+            let items = [];
 
             allInputs.forEach(input => {
                 const w = parseFloat(input.value);
@@ -477,19 +477,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Try to find the label text nearby
                     const row = input.closest('.karat-row');
                     const labelText = row ? row.querySelector('.karat-label').innerText : input.dataset.purity;
-                    // Clean up label text (remove newlines)
-                    const cleanLabel = labelText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                    // Clean up label text (remove newlines and small tags)
+                    let cleanLabel = labelText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                    // Remove text inside <small> tags for cleaner message
+                    cleanLabel = cleanLabel.replace(/<[^>]*>?/gm, '').trim();
+                    // Fallback cleanup if still includes small text
+                    cleanLabel = cleanLabel.split('Geo')[0].split('Lin')[0].split('Est')[0].split('Arg')[0].trim(); // Rough cleanup based on labels
 
-                    details += `• ${cleanLabel}: ${w}g\n`;
+                    // Better approach: just use hardcoded map or data attributes if possible, 
+                    // but for now let's use the explicit text from the DOM cleaner.
+                    // Actually, the simplest way is to construct it:
+                    const metal = input.dataset.metal === 'gold' ? 'Oro' : 'Argento';
+                    const purity = input.dataset.purity;
+                    // Map purity to common names
+                    let typeName = `${metal} ${purity}`;
+                    if (metal === 'gold') {
+                        if (purity == 0.999) typeName = 'Oro 24kt (Lingotti)';
+                        if (purity == 0.750) typeName = 'Oro 18kt (Gioielli)';
+                        if (purity == 0.585) typeName = 'Oro 14kt';
+                    } else {
+                        if (purity == 0.999) typeName = 'Argento 999';
+                        if (purity == 0.925) typeName = 'Argento 925';
+                        if (purity == 0.800) typeName = 'Argento 800';
+                    }
+
+                    items.push(`${w}g di ${typeName}`);
                 }
             });
 
-            if (!details) {
-                alert('Inserisci almeno un peso per calcolare la quotazione.');
+            if (items.length === 0) {
+                alert('Inserisci almeno un peso per calcolare la stima.');
                 return;
             }
 
-            const message = `Buongiorno! Ho appena calcolato questa quotazione sul sito:\n\n${details}\n💰 TOTALE: ${total}\n\nVorrei fissare un appuntamento per bloccare il prezzo.`;
+            const itemsString = items.join(', ');
+            // "Buongiorno OroClass, ho usato il vostro strumento di stima per circa [INSERIRE GRAMMI]g di [INSERIRE TIPO METALLO]. Vorrei passare in negozio per una valutazione definitiva senza impegno. Quando mi consigliate di venire?"
+
+            const message = `Buongiorno OroClass, ho usato il vostro strumento di stima per circa ${itemsString}. Vorrei passare in negozio per una valutazione definitiva senza impegno. Quando mi consigliate di venire?`;
+
             const waLink = `https://wa.me/393407964936?text=${encodeURIComponent(message)}`;
 
             window.open(waLink, '_blank');
