@@ -204,6 +204,22 @@ h4 {
     letter-spacing: -0.02em;
 }
 
+.trust-icons-badges {
+    display: flex;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .trust-icons-badges {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        max-width: none;
+    }
+}
+
 h1 {
     font-size: clamp(1.75rem, 6vw + 0.5rem, 3.5rem);
     /* Fluid typography */
@@ -1377,26 +1393,42 @@ h2 {
 .status-dot.market-open {
     background: var(--color-success);
     animation: pulse-green 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 
-/* Status Dot - CLOSED (Red) */
+/* Status Dot - CLOSED (Red with pulse) */
 .status-dot.market-closed {
     background: #ef4444;
-    /* Red */
+    animation: pulse-red 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
 }
 
-/* Pulsing Animation */
+/* Pulsing Animations */
 @keyframes pulse-green {
 
     0%,
     100% {
         opacity: 1;
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
     }
 
     50% {
-        opacity: 0.8;
-        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+        opacity: 0.6;
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+}
+
+@keyframes pulse-red {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+
+    50% {
+        opacity: 0.6;
+        box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
     }
 }
 
@@ -1856,7 +1888,7 @@ h2 {
 
     /* Sections */
     .section-padding {
-        padding: 2rem 0.75rem !important;
+        padding: 3rem 0.75rem !important;
     }
 
     h2 {
@@ -2221,6 +2253,26 @@ h2 {
     margin-top: 2rem;
 }
 
+#load-more-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+#load-more-container .btn {
+    white-space: nowrap;
+    width: auto;
+    max-width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .vetrina-card {
     background: var(--color-primary-light);
     border: 1px solid var(--color-primary-border);
@@ -2293,7 +2345,6 @@ h2 {
 .scroll-arrow {
     position: absolute;
     top: 50%;
-    right: 15px;
     transform: translateY(-50%);
     background: rgba(0, 0, 0, 0.6);
     color: var(--color-accent);
@@ -2306,15 +2357,39 @@ h2 {
     font-size: 1.2rem;
     cursor: pointer;
     border: 1px solid var(--color-accent);
-    z-index: 10;
+    z-index: 15;
     transition: all 0.3s ease;
     backdrop-filter: blur(4px);
+}
+
+.scroll-arrow.prev {
+    left: 15px;
+}
+
+.scroll-arrow.next {
+    right: 15px;
 }
 
 .scroll-arrow:hover {
     background: var(--color-accent);
     color: #000;
     transform: translateY(-50%) scale(1.1);
+}
+
+#load-more-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+#load-more-vetrina {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(225, 193, 110, 0.2);
 }
 
 .vetrina-content {
@@ -2346,28 +2421,58 @@ h2 {
 }
 
 .vetrina-price {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.15rem;
+    font-weight: 800;
     color: var(--color-accent);
     font-family: var(--font-mono);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .btn-vetrina {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    background: transparent;
+    color: var(--color-accent);
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
     font-size: 0.85rem;
+    font-weight: 600;
     text-decoration: none;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--color-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.btn-vetrina:hover {
+.btn-vetrina::before {
+    content: "💬";
+    font-size: 1rem;
+}
+
+.btn-vetrina:hover,
+.btn-vetrina:active {
     background: #25D366;
     /* WhatsApp color */
     color: white;
     border-color: #25D366;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+}
+
+@media (max-width: 480px) {
+    .btn-vetrina {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .vetrina-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .vetrina-price {
+        font-size: 1.3rem;
+    }
 }
 
 /* Lightbox Styles */

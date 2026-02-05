@@ -369,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 6. SMART PRICING FETCH ---
     async function updatePrices() {
         try {
-            console.log('Fetching Smart Prices...');
             const response = await fetch(API_URL);
             const data = await response.json();
 
@@ -378,21 +377,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rawGold24k = normalizePricePerGram(data.gold, 'gold');
                 const rawSilver999 = normalizePricePerGram(data.silver, 'silver');
 
-                // === DEBUG LOGGING (Transparency) ===
-                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-                console.log('📊 PREZZI API NORMALIZZATI (EUR/grammo):');
-                console.log(`🥇 ORO PURO (24k): ${rawGold24k.toFixed(2)} €/g`);
-                console.log(`🥈 ARGENTO PURO (999): ${rawSilver999.toFixed(4)} €/g`);
-                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
                 // Apply Market-Based Spreads to Base Prices
                 basePrices.gold = rawGold24k * PAYOUT_GOLD;
                 basePrices.silver = rawSilver999 * PAYOUT_SILVER;
-
-                console.log('💰 PREZZI CLIENTE (dopo spread):');
-                console.log(`🥇 ORO: ${basePrices.gold.toFixed(2)} €/g (cliente riceve ${(PAYOUT_GOLD * 100).toFixed(0)}% del valore spot)`);
-                console.log(`🥈 ARGENTO: ${basePrices.silver.toFixed(4)} €/g (cliente riceve ${(PAYOUT_SILVER * 100).toFixed(0)}% del valore spot)`);
-                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
                 // Update Hero Section Ticker Prices
                 const price24kt = document.getElementById('price-24kt');
@@ -567,16 +554,36 @@ async function loadVetrina() {
             return;
         }
 
-        // Store global for lightbox reference
+        // Store global for lightbox and pagination reference
         window.vetrinaData = articoli;
 
-        grid.innerHTML = articoli.map((item, itemIdx) => {
-            const imgList = (item.images && item.images.length > 0) ? item.images : [item.image || ''];
-            // Filter empty
-            const cleanImgs = imgList.filter(src => src);
-            if (cleanImgs.length === 0) cleanImgs.push('https://placehold.co/600x400?text=No+Image');
+        renderVetrina(false);
+    } catch (error) {
+        console.error('Errore vetrina:', error);
+        grid.innerHTML = '<p class="text-danger text-center">Impossibile caricare la vetrina. Riprova più tardi.</p>';
+    }
+}
 
-            return `
+function renderVetrina(showAll = false) {
+    const grid = document.getElementById('vetrina-grid');
+    if (!grid || !window.vetrinaData) return;
+
+    const isMobile = window.innerWidth <= 768;
+    // Filter out sold items for the public site
+    const articoli = (window.vetrinaData || []).filter(item => !item.sold);
+    const renderAllArticoli = document.body.classList.contains('vetrina-page');
+    // If on homepage, limit to 3. If on vetrina page, show all available.
+    const limit = renderAllArticoli ? articoli.length : (isMobile ? 3 : 3);
+
+    const visibleItems = articoli.slice(0, limit);
+
+    grid.innerHTML = visibleItems.map((item, itemIdx) => {
+        const imgList = (item.images && item.images.length > 0) ? item.images : [item.image || ''];
+        // Filter empty
+        const cleanImgs = imgList.filter(src => src);
+        if (cleanImgs.length === 0) cleanImgs.push('https://placehold.co/600x400?text=No+Image');
+
+        return `
             <div class="vetrina-card">
                 <!-- 1. Title Top (Gold, Bold) -->
                 <div class="vetrina-header">
@@ -585,24 +592,36 @@ async function loadVetrina() {
 
                 <!-- 2. Carousel / Image -->
                 <div class="vetrina-carousel-wrapper">
-                    <div class="vetrina-carousel">
-                        ${cleanImgs.map((img, imgIdx) =>
-                `<img src="${img}" alt="${item.title}" loading="lazy"
-                                style="cursor: zoom-in;"
-                                onclick="openItemLightbox(${itemIdx}, ${imgIdx})">`
-            ).join('')}
-                    </div>
-                    <!-- Elegant Arrow Indicator if > 1 image -->
+                    <!-- Left Arrow (Hidden initially) -->
                     ${(cleanImgs.length > 1)
-                    ? '<div class="scroll-arrow" onclick="this.parentElement.querySelector(\'.vetrina-carousel\').scrollBy({left: 300, behavior: \'smooth\'})">→</div>'
-                    : ''}
+                ? '<div class="scroll-arrow prev" style="display: none;" onclick="const c = this.parentElement.querySelector(\'.vetrina-carousel\'); c.scrollBy({left: -c.offsetWidth, behavior: \'smooth\'})">←</div>'
+                : ''}
+                    
+                    <div class="vetrina-carousel" onscroll="const p=this.parentElement.querySelector(\'.scroll-arrow.prev\'); const n=this.parentElement.querySelector(\'.scroll-arrow.next\'); if(p) p.style.display = this.scrollLeft > 20 ? \'flex\' : \'none\'; if(n) n.style.display = (this.scrollLeft + this.offsetWidth < this.scrollWidth - 20) ? \'flex\' : \'none\';">
+                        ${cleanImgs.map((img, imgIdx) =>
+                    `<img src="${img}" alt="${item.title}" loading="lazy"
+                                 style="cursor: zoom-in;"
+                                 onclick="openItemLightbox(${itemIdx}, ${imgIdx})">`
+                ).join('')}
+                    </div>
+                    
+                    <!-- Right Arrow -->
+                    ${(cleanImgs.length > 1)
+                ? '<div class="scroll-arrow next" onclick="const c = this.parentElement.querySelector(\'.vetrina-carousel\'); c.scrollBy({left: c.offsetWidth, behavior: \'smooth\'})">→</div>'
+                : ''}
                 </div>
 
                 <!-- 3. Description & Footer -->
                 <div class="vetrina-content">
                     <p class="vetrina-desc">${item.description}</p>
                     <div class="vetrina-footer">
-                        <span class="vetrina-price">${item.price}</span>
+                        <span class="vetrina-price">
+                            ${(() => {
+                const p = parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0;
+                if (p === 0) return 'Prezzo su richiesta';
+                return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(p);
+            })()}
+                        </span>
                         <a href="https://wa.me/393494408810?text=${encodeURIComponent('Salve, sono interessato all\'articolo: ' + item.title)}" 
                            class="btn-vetrina" target="_blank" aria-label="Richiedi info su ${item.title}">
                             Richiedi Info
@@ -611,11 +630,27 @@ async function loadVetrina() {
                 </div>
             </div>
         `;
-        }).join('');
+    }).join('');
 
-    } catch (error) {
-        console.error('Errore vetrina:', error);
-        grid.innerHTML = '<p class="text-danger text-center">Impossibile caricare la vetrina. Riprova più tardi.</p>';
+    // Discovery Button for Homepage
+    const loadMoreContainer = document.getElementById('load-more-container');
+    if (loadMoreContainer) loadMoreContainer.remove();
+
+    if (!renderAllArticoli && articoli.length > limit) {
+        const btnContainer = document.createElement('div');
+        btnContainer.id = 'load-more-container';
+        btnContainer.style.textAlign = 'center';
+        btnContainer.style.marginTop = '4rem';
+        btnContainer.innerHTML = `
+            <a href="vetrina.html" class="btn btn-primary" style="border-radius: 50px; min-width: 240px;">
+                Scopri la Vetrina
+                <span style="font-size: 0.9rem; margin-left: 10px; opacity: 0.9;">→</span>
+            </a>
+            <p style="color: var(--color-text-muted); margin-top: 1rem; font-size: 0.9rem;">
+                Tutti i ${articoli.length} articoli disponibili
+            </p>
+        `;
+        grid.after(btnContainer);
     }
 }
 
@@ -623,4 +658,15 @@ async function loadVetrina() {
 document.addEventListener('DOMContentLoaded', () => {
     initLightbox();
     loadVetrina();
+
+    // Handle screen resize for pagination limits
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            // Only re-render if we are NOT in "show all" mode
+            // We can check if the button exists or use a simple flag if we had one
+            renderVetrina(false);
+        }, 250);
+    });
 });

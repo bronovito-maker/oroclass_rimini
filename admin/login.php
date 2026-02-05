@@ -11,8 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if ($email === $valid_email && password_verify($password, $password_hash)) {
+        session_regenerate_id(true); // Harden session
         $_SESSION['loggedin'] = true;
-        header('Location: index.php');
+        header('Location: ./index.php');
         exit;
     } else {
         $error = "Credenziali non valide.";
@@ -32,25 +33,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body class="login-body">
-    <div class="login-container">
-        <div class="logo-area">
-            <h1>ORO<span style="color: #E1C16E;">CLASS</span></h1>
-            <p>Admin Panel</p>
+    <div class="login-page-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <span class="login-logo"><span class="text-gold">ORO</span><span>CLASS</span> <span
+                        class="text-gold">RIMINI</span></span>
+                <p class="login-subtitle">MANAGER ACCESS</p>
+            </div>
+
+            <?php if (isset($error)): ?>
+                <div class="error-msg"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+
+            <form method="POST" action="">
+                <div class="form-group">
+                    <label class="form-label">Email Amministratore</label>
+                    <input type="email" name="email" placeholder="email@esempio.it" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary">Entra nel Gestore</button>
+            </form>
         </div>
-
-        <?php if (isset($error)): ?>
-            <div class="error-msg"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
-
-        <form method="POST" action="">
-            <div class="form-group">
-                <input type="email" name="email" placeholder="Email Amministratore" required autofocus>
-            </div>
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
-            <button type="submit" class="btn-primary">Entra</button>
-        </form>
     </div>
 </body>
 

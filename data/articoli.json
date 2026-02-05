@@ -1,9 +1,31 @@
 [
     {
+        "id": 1770312021,
+        "title": "TAG HEUER KIRIUM 2000",
+        "description": "Tag Heuer Kirium 2000. Revisionato e certificato. Senza scatola.",
+        "price": "1200",
+        "images": [
+            "uploads\/img_1770312442_0_0871b7.webp"
+        ],
+        "sold": false
+    },
+    {
+        "id": 1770311390,
+        "title": "BULOVA CHRONO ALARM 1996",
+        "description": "Bulova Chrono Alarm in ottime condizioni. Classe 1996. Revisionato. Senza scatola e documenti.",
+        "price": "800",
+        "images": [
+            "uploads\/img_1770311390_3_5100db.jpg",
+            "uploads\/img_1770311389_0_7b5ed1.jpg",
+            "uploads\/img_1770311389_1_6396aa.jpg",
+            "uploads\/img_1770311389_2_f29fac.jpg"
+        ]
+    },
+    {
         "id": 1,
         "title": "Rolex Submariner Date",
         "description": "Ref. 126610LN, Anno 2023, Mai indossato, Scatola e Garanzia ufficiali.",
-        "price": "€ 14.500",
+        "price": "14500",
         "images": [
             "uploads\/img_1770299370_0_b6cf37.jpg"
         ]

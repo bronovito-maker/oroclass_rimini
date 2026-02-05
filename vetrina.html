@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>La Vetrina dei Preziosi | Occasioni Uniche - OroClass Rimini</title>
+    <meta name="description"
+        content="Scopri la nostra selezione esclusiva di gioielli, orologi e argenteria. Occasioni uniche selezionate con la professionalità di OroClass Rimini.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&family=Roboto+Mono:wght@500&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="resources/res/favicon.png">
+
+    <style>
+        .vetrina-hero {
+            padding: 5rem 0 2rem;
+            text-align: center;
+            background: radial-gradient(circle at center, #151A23 0%, #0B0E14 100%);
+            border-bottom: 1px solid var(--color-primary-border);
+        }
+
+        .vetrina-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            margin-bottom: 0.75rem;
+        }
+
+        .vetrina-hero p {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .back-home:hover {
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .vetrina-hero {
+                padding: 5rem 0 2.5rem;
+            }
+
+            .vetrina-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .vetrina-hero p {
+                font-size: 1rem;
+            }
+
+            .back-home {
+                margin-bottom: 1.5rem;
+            }
+
+            .section-padding {
+                padding: 3rem 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="vetrina-page">
+    <header class="site-header scrolled">
+        <div class="container flex justify-between">
+            <div class="logo">
+                <a href="index.html" aria-label="OroClass Homepage">
+                    <span style="font-family: 'Manrope'; font-size: 1.5rem; font-weight: 800; color: white;"><span
+                            class="text-gold">ORO</span>CLASS <span class="text-gold">RIMINI</span></span>
+                </a>
+            </div>
+
+            <button class="menu-toggle" aria-label="Apri Menu" aria-expanded="false" aria-controls="nav-menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <nav id="nav-menu" class="nav-menu">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#come-funziona" class="nav-link">Il Metodo</a>
+                <a href="vetrina.html" class="nav-link active">Vetrina</a>
+                <a href="index.html#chi-siamo" class="nav-link">Chi Siamo</a>
+                <a href="index.html#faq" class="nav-link">FAQ</a>
+                <a href="index.html#contatti" class="nav-link">Contatti</a>
+                <a href="tel:393494408810" class="nav-link nav-link-cta">
+                    <span class="nav-icon">📞</span>
+                    <span class="nav-text">CHIAMA ORA</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="vetrina-hero">
+            <div class="container">
+                <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+                    <a href="index.html" class="back-home">← Torna alla homepage</a>
+                </div>
+                <h1 class="text-gradient">La Nostra Vetrina</h1>
+                <p>Una selezione curata di gioielli, orologi di lusso e pezzi unici in argento. Ogni pezzo è garantito
+                    per autenticità e valore.</p>
+            </div>
+        </section>
+
+        <section class="section-padding">
+            <div class="container">
+                <div id="vetrina-grid" class="vetrina-grid">
+                    <div class="loading-spinner">Caricamento articoli...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo"
+        style="border-top: 1px solid rgba(255,255,255,0.05); padding: 4rem 0;">
+        <div class="container">
+            <div class="grid"
+                style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; margin-bottom: 3rem; text-align: left;">
+
+                <!-- Col 1: Chi Siamo -->
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 1rem;"><span class="text-gold">ORO</span>CLASS <span
+                            class="text-gold">RIMINI</span></div>
+                    <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        Il punto di riferimento a Rimini per la compravendita di preziosi, con la massima trasparenza.
+                    </p>
+                </div>
+
+                <!-- Col 2: Contatti Footer -->
+                <div class="footer-col">
+                    <h4 style="color: white; margin-bottom: 1.5rem;">Contatti Rapidi</h4>
+                    <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">
+                        <a href="tel:+393494408810"
+                            style="color:inherit; text-decoration:none; display:block; margin-bottom:0.5rem;">☎️ - +39
+                            349
+                            440 8810</a>
+                        <a href="tel:+393407964936"
+                            style="color:inherit; text-decoration:none; display:block; margin-bottom:0.5rem;">📱 - +39
+                            340
+                            796 4936</a>
+                        <a href="mailto:shop@oroclass.net" style="color:inherit; text-decoration:none;">📧
+                            shop@oroclass.net</a>
+                    </p>
+                </div>
+
+                <!-- Col 3: Legalità Trust -->
+                <div class="footer-col">
+                    <h4 style="color: white; margin-bottom: 1.5rem;">Legalità & Trasparenza</h4>
+                    <div style="font-size: 0.85rem; color: #64748B; line-height: 1.6;">
+                        <p style="margin-bottom: 0.5rem;"><strong>Autorizzazione P.S.:</strong><br>Questura di Rimini
+                            Cat.14.E/2021/P.A.S.<br>prot: 0024024 del 21/04/2021</p>
+                        <p><strong>Iscrizione OAM:</strong> OCO4209</p>
+                        <p style="margin-top: 1rem; font-size: 0.75rem;">Operatore Professionale in Oro<br>Aut. Banca
+                            d'Italia</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright Bar -->
+            <div class="text-center"
+                style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; color: #94A3B8; font-size: 0.8rem;">
+                <p style="margin-bottom: 0.5rem;">
+                    © 2026 OroClass Rimini - P.IVA 04547320400
+                </p>
+                <p>
+                    <a href="privacy.html" class="interactive-link" style="font-size: 0.85rem; margin: 0 10px;">Privacy
+                        Policy</a> •
+                    <a href="privacy.html#cookie" class="interactive-link"
+                        style="font-size: 0.85rem; margin: 0 10px;">Cookie Policy</a> •
+                    <a href="privacy.html#legal" class="interactive-link"
+                        style="font-size: 0.85rem; margin: 0 10px;">Note
+                        Legali</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sticky Mobile CTA Bar (Predictive Nav) -->
+    <div class="sticky-bar" role="navigation" aria-label="Azioni Rapide">
+        <a href="tel:3407964936" class="btn btn-primary" style="flex:2; font-size: 1.1rem; padding: 1rem;">📞 CHIAMA
+            ORA</a>
+        <a href="https://maps.google.com/?q=Compro+Oro+Rimini+Viale+Rimembranze+40" target="_blank"
+            class="btn btn-secondary" style="flex:1;">📍 Indicazioni</a>
+    </div>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+        <!-- Menu Header -->
+        <div class="mobile-nav-header">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <span style="font-family: 'Manrope'; font-size: 1.5rem; font-weight: 800; color: white;"><span
+                        class="text-gold">ORO</span>CLASS <span class="text-gold">RIMINI</span></span>
+            </a>
+            <button class="close-menu-btn" aria-label="Chiudi Menu">✕</button>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="mobile-nav-links">
+            <a href="index.html#home" class="mobile-nav-item">
+                <span style="margin-right: 10px;">🏠</span> Home
+            </a>
+            <a href="index.html#come-funziona" class="mobile-nav-item">
+                <span style="margin-right: 10px;">⚙️</span> Il Metodo
+            </a>
+            <a href="vetrina.html" class="mobile-nav-item active">
+                <span style="margin-right: 10px;">💎</span> Vetrina
+            </a>
+            <a href="index.html#chi-siamo" class="mobile-nav-item">
+                <span style="margin-right: 10px;">👤</span> Chi Siamo
+            </a>
+            <a href="index.html#faq" class="mobile-nav-item">
+                <span style="margin-right: 10px;">❓</span> FAQ
+            </a>
+            <a href="index.html#contatti" class="mobile-nav-item">
+                <span style="margin-right: 10px;">📍</span> Contatti
+            </a>
+        </nav>
+
+        <!-- Mobile CTA -->
+        <div class="mobile-nav-footer" style="display: flex; flex-direction: column; gap: 1rem;">
+            <a href="tel:393494408810" class="btn btn-primary full-width">
+                📞 CHIAMA ORA
+            </a>
+            <a href="https://wa.me/393494408810?text=Buongiorno%20Sabrina,%20vorrei%20prenotare%20un%20appuntamento%20per%20una%20valutazione%20professionale."
+                class="btn full-width" target="_blank"
+                style="background: #0B0E14; color: white; border: 1px solid var(--color-accent); border-radius: 50px;">
+                🗓️ Fissa un Appuntamento
+            </a>
+        </div>
+    </div>
+
+    <!-- Swiper.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
