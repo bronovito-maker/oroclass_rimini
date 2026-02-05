@@ -85,21 +85,15 @@
       "openingHoursSpecification": [
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "09:00",
-          "closes": "13:00"
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "09:30",
+          "closes": "12:30"
         },
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
           "opens": "15:30",
-          "closes": "19:30"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Saturday",
-          "opens": "09:00",
-          "closes": "13:00"
+          "closes": "19:00"
         }
       ],
       "sameAs": [
@@ -169,19 +163,13 @@
             </button>
 
             <nav id="nav-menu" class="nav-menu" role="navigation" aria-label="Menu Principale">
-                <a href="#vetrina" class="nav-link">
-                    <span class="nav-icon">💎</span>
-                    <span class="nav-text">Vetrina</span>
-                </a>
-                <a href="#quotazioni" class="nav-link">
-                    <span class="nav-icon">📊</span>
-                    <span class="nav-text">Quota Oro</span>
-                </a>
-                <a href="#contatti" class="nav-link">
-                    <span class="nav-icon">📍</span>
-                    <span class="nav-text">Trova Negozio</span>
-                </a>
-                <a href="tel:3407964936" class="nav-link nav-link-cta">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#come-funziona" class="nav-link">Il Metodo</a>
+                <a href="#vetrina" class="nav-link">Vetrina</a>
+                <a href="#chi-siamo" class="nav-link">Chi Siamo</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#contatti" class="nav-link">Contatti</a>
+                <a href="tel:393494408810" class="nav-link nav-link-cta">
                     <span class="nav-icon">📞</span>
                     <span class="nav-text">CHIAMA ORA</span>
                 </a>
@@ -215,21 +203,21 @@
                         </p>
 
                         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                            <a href="https://wa.me/393407964936?text=Buongiorno%20Sabrina,%20vorrei%20prenotare%20un%20appuntamento%20per%20una%20valutazione%20professionale."
+                            <a href="https://wa.me/393494408810?text=Buongiorno%20Sabrina,%20vorrei%20prenotare%20un%20appuntamento%20per%20una%20valutazione%20professionale."
                                 class="btn btn-primary" target="_blank"
                                 style="min-width: 260px; display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem;">
-                                <span>📅</span> Prenota un Appuntamento
+                                <span>📅</span> Fissa un Appuntamento
                             </a>
                         </div>
 
                         <div class="trust-icons" style="margin-top: 3rem; display: flex; gap: 2rem; opacity: 0.7;">
                             <div
                                 style="display: flex; align-items: center; gap: 0.5rem; color: white; font-size: 0.9rem;">
-                                <span>⚖️</span> Operatore OAM
+                                <span>⚖️</span> Operatore OAM Certificato
                             </div>
                             <div
                                 style="display: flex; align-items: center; gap: 0.5rem; color: white; font-size: 0.9rem;">
-                                <span>⭐</span> 5.0 su Google
+                                Più di 70 recensioni ⭐⭐️⭐️⭐️⭐️ su Google
                             </div>
                         </div>
                     </div>
@@ -237,8 +225,7 @@
                     <!-- Right Column: Financial Terminal -->
                     <div class="hero-visual-col">
                         <!-- Financial Terminal Card -->
-                        <div class="financial-terminal"
-                            style="background: #151A23; border: 1px solid #2A3441; border-radius: 16px; padding: 1.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                        <div class="financial-terminal">
 
                             <!-- Header: Market Status -->
                             <!-- Header: Market Status (Dynamic) -->
@@ -290,7 +277,7 @@
         <section id="come-funziona" class="section-padding" style="background:var(--color-primary-light);">
             <div class="container">
                 <h2 class="text-center" style="margin-bottom: 3rem;">Il Metodo OroClass: <span
-                        class="text-gradient">Trasparenza Certificata</span></h2>
+                        class="text-gradient">Valutazioni Lineari</span></h2>
                 <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
                     <div class="process-step">
                         <span class="process-icon">⚖️</span>
@@ -308,50 +295,72 @@
                         <span class="process-icon">📍</span>
                         <h3 class="process-title">Fiducia Locale</h3>
                         <p class="process-desc">Punto di riferimento locale con centinaia di clienti soddisfatti. Oltre
-                            127 recensioni positive a Rimini.</p>
+                            75 recensioni positive a Rimini.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Transparent Calculator -->
-        <section id="valutazione" class="section-padding" style="background-color: var(--color-primary);"
-            aria-labelledby="calc-title">
-            <div class="container text-center">
-                <h2 id="calc-title">Quotazioni di <span class="text-gradient">Borsa Live</span></h2>
-                <div style="margin-bottom: 2rem; max-width: 600px; margin-inline: auto;">
-                    <p class="text-muted">Monitora l'andamento dei metalli preziosi in tempo reale. Da OroClass, le
-                        nostre valutazioni seguono fedelmente il fixing ufficiale di Londra per garantirti la massima
-                        onestà.</p>
+        <!-- "Trasparenza e Linearità" Section (The OroClass Method) -->
+        <section id="valutazione" class="section-padding" style="background-color: var(--color-primary-light);">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="text-gradient" style="margin-bottom: 1rem;">Professionalità e Trasparenza</h2>
+                    <p class="text-muted" style="max-width: 700px; margin: 0 auto; line-height: 1.6;">
+                        Da OroClass, le nostre valutazioni seguono fedelmente il fixing ufficiale di Londra per
+                        garantirti la massima onestà e il miglior valore di mercato.
+                    </p>
                 </div>
 
+                <div class="grid-3"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    <div class="card-feature">
+                        <div class="feature-icon">✨</div>
+                        <h3 style="margin-bottom: 1rem; color: #fff;">Oro e Argento</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">Acquistiamo non
+                            solo gioielli in oro, ma siamo specializzati nell'acquisto di
+                            <strong>argenteria, posate, vassoio e monete</strong> in argento. Ogni pezzo viene valutato
+                            secondo la sua caratura effettiva.
+                        </p>
+                    </div>
 
+                    <div class="card-feature">
+                        <div class="feature-icon">🏢</div>
+                        <h3 style="margin-bottom: 1rem; color: #fff;">Solo in Negozio</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">Per garantirti
+                            la massima precisione, eseguiamo le perizie <strong>esclusivamente dal
+                                vivo</strong>. Analizziamo caratura e peso netto di fronte ai tuoi occhi, senza
+                            barriere.</p>
+                    </div>
 
-                <div class="text-center" style="max-width: 600px; margin: 0 auto;">
-                    <p style="font-size: 1.1rem; color: white; margin-bottom: 2rem;">
-                        <span style="display:block; font-size: 2rem; margin-bottom: 1rem;">🏢</span>
-                        <strong>Valutazione Solo in Negozio</strong><br>
-                        Per garantirti la massima precisione e trasparenza, eseguiamo le perizie esclusivamente dal
-                        vivo, analizzando la caratura e il peso netto dei tuoi preziosi di fronte ai tuoi occhi.
-                    </p>
+                    <div class="card-feature">
+                        <div class="feature-icon">📈</div>
+                        <h3 style="margin-bottom: 1rem; color: #fff;">Fixing Ufficiale</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.6;">Non usiamo
+                            prezzi civetta. La stima si basa sui dati <strong>LBMA (London Bullion Market
+                                Association)</strong>, assicurandoti una valutazione lineare e aggiornata al secondo.
+                        </p>
+                    </div>
+                </div>
 
-                    <a href="https://wa.me/393407964936?text=Buongiorno%20Sabrina,%20vorrei%20prenotare%20un%20appuntamento%20in%20negozio%20per%20una%20valutazione."
-                        target="_blank" class="btn btn-primary"
-                        style="width: 100%; max-width: 400px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1rem;">
-                        <span>📅</span> Prenota un appuntamento
-                    </a>
-
-                    <p class="text-muted" style="margin-top: 1rem; font-size: 0.9rem;">
-                        Riceverai conferma immediata da Sabrina
-                    </p>
+                <div class="text-center" style="margin-top: 4rem;">
+                    <div class="cta-info-box">
+                        <p style="margin-bottom: 1.5rem; color: #fff; font-size: 1.1rem;">Hai dubbi su un oggetto o un
+                            set di posate in argento?</p>
+                        <a href="https://wa.me/393494408810?text=Salve%20Sabrina,%20avrei%20bisogno%20di%20un'informazione%20su%20alcuni%20oggetti%20in%20oro/argento."
+                            class="btn btn-outline"
+                            style="border: 1px solid var(--color-accent); color: var(--color-accent); padding: 12px 24px; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+                            💬 Richiedi Informazioni
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Trust Integration: Wall of Love & Sabrina -->
-        <section id="trust" class="section-padding">
+        <!-- Trust Integration: Wall of Love -->
+        <section id="trust" class="section-padding" style="padding-bottom: 0;">
             <div class="container">
-                <!-- Wall of Love -->
                 <div class="text-center" style="margin-bottom: 3rem;">
                     <h2 style="margin-bottom: 1rem;">Cosa dicono di noi i cittadini di Rimini</h2>
                     <p class="text-muted">La voce di chi ha già scelto la trasparenza.</p>
@@ -375,7 +384,6 @@
                     </div>
                 </div>
 
-                <!-- Store Focus Invitation -->
                 <div class="store-focus-box"
                     style="background: var(--color-surface-card); border: 1px solid var(--color-primary-border); border-radius: 12px; padding: 2rem; text-align: center; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
                     <p style="font-size: 1.2rem; font-weight: 600; color: white; margin-bottom: 0.5rem;">
@@ -386,11 +394,28 @@
                             style="color: var(--color-accent); text-decoration: none; font-weight: bold;">Viale
                             Rimembranze, 40</a>.</p>
                 </div>
+            </div>
+        </section>
 
-                <!-- Chi è Sabrina -->
-                <!-- Chi è Sabrina -->
-                <h2 id="chi-siamo" class="text-center" style="margin-bottom: 2rem; scroll-margin-top: 100px;">Chi Siamo
-                </h2>
+        <!-- Vetrina Section -->
+        <section id="vetrina" class="section-padding" style="background-color: var(--color-surface);">
+            <div class="container">
+                <div class="text-center" style="margin-bottom: 3rem;">
+                    <h2 class="section-title">La Nostra <span class="text-gradient">Vetrina</span></h2>
+                    <p class="section-subtitle text-muted">Occasioni uniche selezionate dai nostri esperti.</p>
+                </div>
+
+                <div id="vetrina-grid" class="vetrina-grid">
+                    <!-- Dynamic Content Loaded from JSON -->
+                    <div class="loading-spinner">Caricamento articoli...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chi è Sabrina Section -->
+        <section id="chi-siamo" class="section-padding">
+            <div class="container">
+                <h2 class="text-center" style="margin-bottom: 2rem; scroll-margin-top: 100px;">Chi Siamo</h2>
                 <div class="sabrina-card">
                     <div class="sabrina-content">
                         <div class="sabrina-photo-placeholder">S</div>
@@ -436,21 +461,6 @@
                         <p style="font-size: 0.85rem; color: var(--color-text-muted);">Sito conforme European
                             Accessibility Act.</p>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Vetrina Section -->
-        <section id="vetrina" class="section-padding" style="background-color: var(--color-surface);">
-            <div class="container">
-                <div class="text-center" style="margin-bottom: 3rem;">
-                    <h2 class="section-title">La Nostra <span class="text-gradient">Vetrina</span></h2>
-                    <p class="section-subtitle text-muted">Occasioni uniche selezionate dai nostri esperti.</p>
-                </div>
-
-                <div id="vetrina-grid" class="vetrina-grid">
-                    <!-- Dynamic Content Loaded from JSON -->
-                    <div class="loading-spinner">Caricamento articoli...</div>
                 </div>
             </div>
         </section>
@@ -569,9 +579,15 @@
                         <ul class="contact-list-premium">
                             <li>
                                 <span class="icon">📍</span>
-                                <span class="text"><strong>Indirizzo:</strong><br><span class="text-gold"
-                                        style="font-weight: bold;">Viale Rimembranze, 40</span><br>47924 Rimini
-                                    (RN)</span>
+                                <span class="text">
+                                    <strong>Indirizzo:</strong><br>
+                                    <a href="https://maps.google.com/?q=Compro+Oro+Rimini+Viale+Rimembranze+40"
+                                        target="_blank" class="interactive-link" style="text-decoration: none;">
+                                        <span class="text-gold" style="font-weight: bold;">Viale Rimembranze,
+                                            40</span><br>
+                                        47924 Rimini (RN)
+                                    </a>
+                                </span>
                             </li>
                             <li>
                                 <span class="icon">☎️</span>
@@ -588,7 +604,7 @@
                             </li>
                             <li>
                                 <span class="icon">🕒</span>
-                                <span class="text"><strong>Orari:</strong><br>Lun-Sab 09:00 - 13:00 / 15:00 -
+                                <span class="text"><strong>Orari:</strong><br>Lun-Sab 09:30 – 12:30 / 15:30 –
                                     19:00</span>
                             </li>
                         </ul>
@@ -690,32 +706,34 @@
         <!-- Navigation Links -->
         <nav class="mobile-nav-links">
             <a href="#home" class="mobile-nav-item">
-                Home
+                <span style="margin-right: 10px;">🏠</span> Home
             </a>
             <a href="#come-funziona" class="mobile-nav-item">
-                Come Funziona
+                <span style="margin-right: 10px;">⚙️</span> Il Metodo
             </a>
-            <a href="#quotazioni" class="mobile-nav-item">
-                Quotazioni Live
-            </a>
-            <a href="#valutazione" class="mobile-nav-item">
-                Valutazione
+            <a href="#vetrina" class="mobile-nav-item">
+                <span style="margin-right: 10px;">💎</span> Vetrina
             </a>
             <a href="#chi-siamo" class="mobile-nav-item">
-                Chi Siamo
+                <span style="margin-right: 10px;">👤</span> Chi Siamo
             </a>
             <a href="#faq" class="mobile-nav-item">
-                FAQ
+                <span style="margin-right: 10px;">❓</span> FAQ
             </a>
             <a href="#contatti" class="mobile-nav-item">
-                Dove Siamo
+                <span style="margin-right: 10px;">📍</span> Contatti
             </a>
         </nav>
 
         <!-- Mobile CTA -->
-        <div class="mobile-nav-footer">
-            <a href="tel:3407964936" class="btn btn-primary full-width">
+        <div class="mobile-nav-footer" style="display: flex; flex-direction: column; gap: 1rem;">
+            <a href="tel:393494408810" class="btn btn-primary full-width">
                 📞 CHIAMA ORA
+            </a>
+            <a href="https://wa.me/393494408810?text=Buongiorno%20Sabrina,%20vorrei%20prenotare%20un%20appuntamento%20per%20una%20valutazione%20professionale."
+                class="btn full-width" target="_blank"
+                style="background: #0B0E14; color: white; border: 1px solid var(--color-accent); border-radius: 50px;">
+                🗓️ Fissa un Appuntamento
             </a>
         </div>
     </div>

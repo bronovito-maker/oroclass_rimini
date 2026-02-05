@@ -603,7 +603,7 @@ async function loadVetrina() {
                     <p class="vetrina-desc">${item.description}</p>
                     <div class="vetrina-footer">
                         <span class="vetrina-price">${item.price}</span>
-                        <a href="https://wa.me/393407964936?text=${encodeURIComponent('Salve, sono interessato all\'articolo: ' + item.title)}" 
+                        <a href="https://wa.me/393494408810?text=${encodeURIComponent('Salve, sono interessato all\'articolo: ' + item.title)}" 
                            class="btn-vetrina" target="_blank" aria-label="Richiedi info su ${item.title}">
                             Richiedi Info
                         </a>
