@@ -2598,3 +2598,37 @@ select:focus {
     border-radius: 4px;
     box-shadow: 0 0 8px rgba(225, 193, 110, 0.6);
 }
+
+/* ===================== */
+/* FAQ TOGGLE ICON */
+/* ===================== */
+
+.faq-item summary {
+    list-style: none;
+    /* Hide default triangle */
+    position: relative;
+    padding-right: 2rem;
+    /* Space for icon */
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+    /* Safari */
+}
+
+.faq-item summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    font-weight: 300;
+    transition: transform 0.3s ease;
+    line-height: 1;
+}
+
+.faq-item[open] summary::after {
+    transform: translateY(-50%) rotate(45deg);
+}
