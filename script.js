@@ -69,6 +69,28 @@ document.addEventListener('DOMContentLoaded', () => {
         tvContainer.appendChild(script);
     }
 
+    // --- 2.1 SOCIAL PROOF SLIDER (Mobile) ---
+    const swiperEl = document.querySelector('.social-proof-slider');
+    if (swiperEl) {
+        new Swiper('.social-proof-slider', {
+            loop: true,
+            speed: 600,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            slidesPerView: 'auto',
+            centeredSlides: true,
+            spaceBetween: 16,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            effect: 'slide',
+            grabCursor: true
+        });
+    }
+
     // --- 3. MOBILE MENU TOGGLE ---
     const menuToggle = document.querySelector('.menu-toggle');
     const navMenu = document.querySelector('.mobile-nav-overlay');
@@ -425,18 +447,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         minute: '2-digit'
                     });
 
-                    if (sectionTitle && !document.getElementById('price-badge')) {
-                        const badge = document.createElement('span');
-                        badge.id = 'price-badge';
-                        badge.className = 'ticker-trend price-update-badge';
-                        badge.style.marginLeft = '12px';
-                        badge.style.fontSize = '0.75rem';
-                        badge.style.color = 'var(--color-text-muted)';
-                        badge.innerHTML = `• Aggiornato: ${dateString}`;
-                        sectionTitle.appendChild(badge);
-                    } else if (document.getElementById('price-badge')) {
-                        // Update existing badge
-                        document.getElementById('price-badge').innerHTML = `• Aggiornato: ${dateString}`;
+                    if (sectionTitle && document.getElementById('price-badge')) {
+                        const badge = document.getElementById('price-badge');
+                        if (badge) badge.remove();
                     }
 
                     // Start countdown to next market open
