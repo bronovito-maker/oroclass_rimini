@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const PAYOUT_SILVER = 0.573; // Silver: 42.7% spread (client gets 57.3%)
 
     const CACHE_DURATION = 24 * 60 * 60; // 24 hours in seconds
+
+
     const OZ_TO_GRAMS = 31.1035; // Conversion factor for troy ounce to grams
 
     // Detection thresholds for oz-to-gram conversion
@@ -38,9 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextUpdateTime = null;
 
     // DOM Elements
-    const allInputs = document.querySelectorAll('.karat-input');
-    const resultDisplay = document.getElementById('result-display');
-    const lockBtn = document.getElementById('lock-btn');
     const sectionTitle = document.getElementById('calc-title');
     const countdownDisplay = document.getElementById('ticker-countdown');
     const marketStatusWidget = document.getElementById('market-status-widget');
@@ -49,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusSubtext = marketStatusWidget?.querySelector('.status-subtext');
 
     // --- 2. TRADINGVIEW WIDGET INJECTION (Fixes HTML Linting) ---
-    const tvContainer = document.getElementById('tv-mini-chart');
+    // --- 2. TRADINGVIEW WIDGET INJECTION (Financial Terminal) ---
+    const tvContainer = document.getElementById('tv-hero-chart') || document.getElementById('tv-mini-chart');
     if (tvContainer) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
@@ -58,11 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
         script.innerHTML = JSON.stringify({
             "symbol": "FX_IDC:XAUEUR",
             "width": "100%",
-            "height": "220",
+            "height": "100%",
             "locale": "it",
             "dateRange": "1M",
             "colorTheme": "dark",
-            "isTransparent": false,
+            "isTransparent": true,
             "autosize": true,
             "largeChartUrl": ""
         });
@@ -366,37 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    let previousTotal = 0;
-
-    // --- 5. CALCULATION LOGIC ---
-    function calculateTotal() {
-        let totalPayout = 0;
-
-        allInputs.forEach(input => {
-            const weight = parseFloat(input.value) || 0;
-            const metalType = input.dataset.metal; // 'gold' or 'silver'
-            const purity = parseFloat(input.dataset.purity); // e.g. 0.750, 0.999
-
-            if (weight > 0) {
-                // Get Base Price for this metal (already discounted by 40% if set)
-                let basePrice = (metalType === 'gold') ? basePrices.gold : basePrices.silver;
-
-                if (basePrice > 0) {
-                    // Specific Logic per Karat (as requested)
-                    // Price = Base (Discounted) * Purity
-                    const pricePerGram = basePrice * purity;
-                    totalPayout += weight * pricePerGram;
-                }
-            }
-        });
-
-        // Update Total Display
-        if (resultDisplay) {
-            animateValue(resultDisplay, previousTotal, totalPayout, 500);
-        }
-        previousTotal = totalPayout;
-    }
-
     // --- 6. SMART PRICING FETCH ---
     async function updatePrices() {
         try {
@@ -457,8 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     startCountdown(nextMarketOpen);
                 }
 
-                // Recalculate immediately with new prices
-                calculateTotal();
             } else {
                 throw new Error('Invalid JSON structure');
             }
@@ -467,72 +434,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fallback values (Approximate safe values to prevent 0)
             basePrices.gold = 50.00; // ~83 spot * 0.60
             basePrices.silver = 0.50; // ~0.83 spot * 0.60
-            calculateTotal();
         }
     }
 
     // --- 7. EVENT LISTENERS ---
-
-    // Input Listeners
-    allInputs.forEach(input => {
-        input.addEventListener('input', calculateTotal);
-    });
-
-    // Lock Price (WhatsApp)
-    if (lockBtn) {
-        lockBtn.addEventListener('click', () => {
-            const total = resultDisplay.textContent;
-            let items = [];
-
-            allInputs.forEach(input => {
-                const w = parseFloat(input.value);
-                if (w > 0) {
-                    // Try to find the label text nearby
-                    const row = input.closest('.karat-row');
-                    const labelText = row ? row.querySelector('.karat-label').innerText : input.dataset.purity;
-                    // Clean up label text (remove newlines and small tags)
-                    let cleanLabel = labelText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-                    // Remove text inside <small> tags for cleaner message
-                    cleanLabel = cleanLabel.replace(/<[^>]*>?/gm, '').trim();
-                    // Fallback cleanup if still includes small text
-                    cleanLabel = cleanLabel.split('Geo')[0].split('Lin')[0].split('Est')[0].split('Arg')[0].trim(); // Rough cleanup based on labels
-
-                    // Better approach: just use hardcoded map or data attributes if possible, 
-                    // but for now let's use the explicit text from the DOM cleaner.
-                    // Actually, the simplest way is to construct it:
-                    const metal = input.dataset.metal === 'gold' ? 'Oro' : 'Argento';
-                    const purity = input.dataset.purity;
-                    // Map purity to common names
-                    let typeName = `${metal} ${purity}`;
-                    if (metal === 'gold') {
-                        if (purity == 0.999) typeName = 'Oro 24kt (Lingotti)';
-                        if (purity == 0.750) typeName = 'Oro 18kt (Gioielli)';
-                        if (purity == 0.585) typeName = 'Oro 14kt';
-                    } else {
-                        if (purity == 0.999) typeName = 'Argento 999';
-                        if (purity == 0.925) typeName = 'Argento 925';
-                        if (purity == 0.800) typeName = 'Argento 800';
-                    }
-
-                    items.push(`${w}g di ${typeName}`);
-                }
-            });
-
-            if (items.length === 0) {
-                alert('Inserisci almeno un peso per calcolare la stima.');
-                return;
-            }
-
-            const itemsString = items.join(', ');
-            // "Buongiorno OroClass, ho usato il vostro strumento di stima per circa [INSERIRE GRAMMI]g di [INSERIRE TIPO METALLO]. Vorrei passare in negozio per una valutazione definitiva senza impegno. Quando mi consigliate di venire?"
-
-            const message = `Buongiorno OroClass, ho usato il vostro strumento di stima per circa ${itemsString}. Vorrei passare in negozio per una valutazione definitiva senza impegno. Quando mi consigliate di venire?`;
-
-            const waLink = `https://wa.me/393407964936?text=${encodeURIComponent(message)}`;
-
-            window.open(waLink, '_blank');
-        });
-    }
 
     // FAQ Accordion (Bonus)
     const faqQuestions = document.querySelectorAll('.faq-question');
@@ -546,10 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (answer) answer.hidden = isExpanded;
         });
     });
-
-    // --- 9. STICKY BAR KEYBOARD MANAGEMENT ---
-    const stickyBar = document.querySelector('.sticky-bar');
-    const calculatorInputs = document.querySelectorAll('.karat-input');
 
     // --- 1. HEADER SCROLL EFFECT (Optimized) ---
     const header = document.querySelector('.site-header');
@@ -569,64 +470,157 @@ document.addEventListener('DOMContentLoaded', () => {
         updateHeader();
     }
 
-    // Hide sticky bar when keyboard opens (input focus)
-    calculatorInputs.forEach(input => {
-        input.addEventListener('focus', () => {
-            if (stickyBar) {
-                stickyBar.classList.add('hidden-keyboard');
-            }
-        });
-
-        input.addEventListener('blur', () => {
-            if (stickyBar) {
-                // Delay to allow time for user to tap another input
-                setTimeout(() => {
-                    // Check if no other calculator input is focused
-                    const anyFocused = Array.from(calculatorInputs).some(inp => inp === document.activeElement);
-                    if (!anyFocused) {
-                        stickyBar.classList.remove('hidden-keyboard');
-                    }
-                }, 100);
-            }
-        });
-    });
-
-    // Also handle when user scrolls while keyboard is open
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-        if (stickyBar && stickyBar.classList.contains('hidden-keyboard')) {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                // Re-check if any input is still focused
-                const anyFocused = Array.from(calculatorInputs).some(inp => inp === document.activeElement);
-                if (!anyFocused) {
-                    stickyBar.classList.remove('hidden-keyboard');
-                }
-            }, 300);
-        }
-    });
-
-    // Handle orientation change and resize events
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            // Re-check if any input is focused after resize/orientation change
-            const anyFocused = Array.from(calculatorInputs).some(inp => inp === document.activeElement);
-            if (stickyBar) {
-                if (anyFocused) {
-                    stickyBar.classList.add('hidden-keyboard');
-                } else {
-                    stickyBar.classList.remove('hidden-keyboard');
-                }
-            }
-        }, 200);
-    });
-
     // --- 10. INITIALIZATION ---
     updatePrices();
 
     // Check market status immediately and update every minute
     checkMarketStatus();
     setInterval(checkMarketStatus, 60000);
+});
+
+// =======================
+// Lightbox Logic (Global)
+// =======================
+let currentLightboxImages = [];
+let currentLightboxIndex = 0;
+
+function initLightbox() {
+    const lightboxHtml = `
+        <div id="vetrina-lightbox" class="lightbox-modal" style="display: none;">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <button class="lightbox-prev" onclick="prevLightboxImage()">&#10094;</button>
+            <img id="lightbox-img" class="lightbox-content" src="">
+            <button class="lightbox-next" onclick="nextLightboxImage()">&#10095;</button>
+            <div id="lightbox-caption" style="color: #ccc; margin-top: 10px; font-family: 'Inter', sans-serif;"></div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', lightboxHtml);
+
+    document.getElementById('vetrina-lightbox').addEventListener('click', function (e) {
+        if (e.target === this) closeLightbox();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (document.getElementById('vetrina-lightbox').style.display === 'flex') {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevLightboxImage();
+            if (e.key === 'ArrowRight') nextLightboxImage();
+        }
+    });
+}
+
+function openLightbox(images, index, title) {
+    currentLightboxImages = images;
+    currentLightboxIndex = index;
+    const modal = document.getElementById('vetrina-lightbox');
+    const imgEl = document.getElementById('lightbox-img');
+    const caption = document.getElementById('lightbox-caption');
+
+    imgEl.src = currentLightboxImages[currentLightboxIndex];
+    caption.textContent = title;
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function openItemLightbox(itemIndex, imgIndex) {
+    if (!window.vetrinaData || !window.vetrinaData[itemIndex]) return;
+    const item = window.vetrinaData[itemIndex];
+
+    const imgList = (item.images && item.images.length > 0) ? item.images : [item.image || ''];
+    const cleanImgs = imgList.filter(src => src);
+    if (cleanImgs.length === 0) cleanImgs.push('https://placehold.co/600x400?text=No+Image');
+
+    openLightbox(cleanImgs, imgIndex, item.title);
+}
+
+function closeLightbox() {
+    document.getElementById('vetrina-lightbox').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+function nextLightboxImage() {
+    currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxImages.length;
+    document.getElementById('lightbox-img').src = currentLightboxImages[currentLightboxIndex];
+}
+
+function prevLightboxImage() {
+    currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxImages.length) % currentLightboxImages.length;
+    document.getElementById('lightbox-img').src = currentLightboxImages[currentLightboxIndex];
+}
+
+// =======================
+// Vetrina Logic
+// =======================
+async function loadVetrina() {
+    const grid = document.getElementById('vetrina-grid');
+    if (!grid) return;
+
+    try {
+        const response = await fetch('data/articoli.json');
+        if (!response.ok) throw new Error('Errore nel caricamento dati');
+
+        const articoli = await response.json();
+
+        if (articoli.length === 0) {
+            grid.innerHTML = '<p class="text-muted text-center">Nessun articolo disponibile al momento.</p>';
+            return;
+        }
+
+        // Store global for lightbox reference
+        window.vetrinaData = articoli;
+
+        grid.innerHTML = articoli.map((item, itemIdx) => {
+            const imgList = (item.images && item.images.length > 0) ? item.images : [item.image || ''];
+            // Filter empty
+            const cleanImgs = imgList.filter(src => src);
+            if (cleanImgs.length === 0) cleanImgs.push('https://placehold.co/600x400?text=No+Image');
+
+            return `
+            <div class="vetrina-card">
+                <!-- 1. Title Top (Gold, Bold) -->
+                <div class="vetrina-header">
+                    <h3 class="vetrina-title">${item.title}</h3>
+                </div>
+
+                <!-- 2. Carousel / Image -->
+                <div class="vetrina-carousel-wrapper">
+                    <div class="vetrina-carousel">
+                        ${cleanImgs.map((img, imgIdx) =>
+                `<img src="${img}" alt="${item.title}" loading="lazy"
+                                style="cursor: zoom-in;"
+                                onclick="openItemLightbox(${itemIdx}, ${imgIdx})">`
+            ).join('')}
+                    </div>
+                    <!-- Elegant Arrow Indicator if > 1 image -->
+                    ${(cleanImgs.length > 1)
+                    ? '<div class="scroll-arrow" onclick="this.parentElement.querySelector(\'.vetrina-carousel\').scrollBy({left: 300, behavior: \'smooth\'})">→</div>'
+                    : ''}
+                </div>
+
+                <!-- 3. Description & Footer -->
+                <div class="vetrina-content">
+                    <p class="vetrina-desc">${item.description}</p>
+                    <div class="vetrina-footer">
+                        <span class="vetrina-price">${item.price}</span>
+                        <a href="https://wa.me/393407964936?text=${encodeURIComponent('Salve, sono interessato all\'articolo: ' + item.title)}" 
+                           class="btn-vetrina" target="_blank" aria-label="Richiedi info su ${item.title}">
+                            Richiedi Info
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        }).join('');
+
+    } catch (error) {
+        console.error('Errore vetrina:', error);
+        grid.innerHTML = '<p class="text-danger text-center">Impossibile caricare la vetrina. Riprova più tardi.</p>';
+    }
+}
+
+// Initialize Vetrina and Lightbox
+document.addEventListener('DOMContentLoaded', () => {
+    initLightbox();
+    loadVetrina();
 });

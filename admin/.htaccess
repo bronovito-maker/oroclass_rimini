@@ -1,0 +1,11 @@
+Options -Indexes
+<FilesMatch "\.(php|json|html|css|js)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Deny access to sensitive files if any exist (though we are clean)
+<FilesMatch "^\.">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

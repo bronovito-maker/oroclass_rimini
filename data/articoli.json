@@ -1,0 +1,39 @@
+[
+    {
+        "id": 1,
+        "title": "Rolex Submariner Date",
+        "description": "Ref. 126610LN, Anno 2023, Mai indossato, Scatola e Garanzia ufficiali.",
+        "price": "€ 14.500",
+        "images": [
+            "uploads\/img_1770299370_0_b6cf37.jpg"
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Anello Solitario Diamante",
+        "description": "Oro Bianco 18kt, Diamante taglio brillante 0.50ct, Purezza VVS1, Colore F.",
+        "price": "€ 2.800",
+        "images": [
+            "uploads\/img_1770299582_0_bc6c92.png"
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Lingotto Oro Puro 100g",
+        "description": "Oro 999.9 certificato LBMA, sigillato in blister con numero seriale.",
+        "price": "Su Richiesta",
+        "images": [
+            "uploads\/img_1770299624_0_e497db.png"
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Omega Speedmaster Moonwatch",
+        "description": "Co-Axial Master Chronometer, Vetro Zaffiro, Nuovo corredo completo.",
+        "price": "€ 7.200",
+        "images": [
+            "uploads\/img_1770300280_0_f33bdc.png",
+            "uploads\/img_1770299668_0_7924c5.png"
+        ]
+    }
+]
